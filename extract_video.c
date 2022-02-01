@@ -51,8 +51,8 @@ Test:
 #define PROGRAM_VERSION "0.3"
 
 struct FILE_IDX_HEADER
-{	
-	uint64_t modifyTimes;
+{
+  uint64_t modifyTimes;
   uint32_t version;
   uint32_t avFiles;
   uint32_t nextFileRecNo;
@@ -63,12 +63,12 @@ struct FILE_IDX_HEADER
 };
 
 struct FILE_IDX_RECORD	
-{	
-	uint32_t fileNo;
+{
+  uint32_t fileNo;
   uint16_t chan;
   uint16_t segRecNums;
-  time_t startTime;
-  time_t endTime;
+  uint32_t startTime;
+  uint32_t endTime;
   uint8_t status;
   uint8_t res1;
   uint16_t lockedSegNum;
@@ -78,13 +78,16 @@ struct FILE_IDX_RECORD
 
 struct SEGMENT_IDX_RECORD
 {
-	uint8_t type;
-	uint8_t status;
-	uint8_t res1[2];
-	uint8_t resolution[4];
-  uint64_t startTime;
-  uint64_t endTime;
-  uint64_t firstKeyFrame_absTime;
+  uint8_t type;
+  uint8_t status;
+  uint8_t res1[2];
+  uint8_t resolution[4];
+  uint32_t startTime;
+  uint32_t startTime2;
+  uint32_t endTime;
+  uint32_t endTime2;
+  uint32_t firstKeyFrame_absTime1;
+  uint32_t firstKeyFrame_absTime2;
   uint32_t firstKeyFrame_stdTime;
   uint32_t lastFrame_stdTime;
   uint32_t startOffset;
@@ -99,10 +102,11 @@ struct SEGMENT_IDX_RECORD
 };
 
 typedef enum log_event
-{	LOG_DEBUG=1,
-	LOG_WARNING=2,
-	LOG_ERROR=4,
-	LOG_INFO=8
+{
+  LOG_DEBUG=1,
+  LOG_WARNING=2,
+  LOG_ERROR=4,
+  LOG_INFO=8
 } log_event;
 
 FILE *_log_debug=NULL,*_log_warning=NULL,*_log_error=NULL,*_log_info=NULL;
@@ -113,7 +117,7 @@ char *timefilename(char* prefix, char* postfix, time_t start, time_t end);
 
 void FILE_IDX_HEADER_normalize (struct FILE_IDX_HEADER *f)
 {
-	f->modifyTimes  =le64toh(f->modifyTimes);
+  f->modifyTimes  =le64toh(f->modifyTimes);
   f->version      =le32toh(f->version);
   f->avFiles      =le32toh(f->avFiles);
   f->nextFileRecNo=le32toh(f->nextFileRecNo);
@@ -123,7 +127,7 @@ void FILE_IDX_HEADER_normalize (struct FILE_IDX_HEADER *f)
 
 void FILE_IDX_RECORD_normalize (struct FILE_IDX_RECORD *f)
 {
-	f->fileNo      =le32toh(f->fileNo);
+  f->fileNo      =le32toh(f->fileNo);
   f->chan        =le16toh(f->chan);
   f->segRecNums  =le16toh(f->segRecNums);
   f->startTime   =le32toh(f->startTime);
@@ -135,7 +139,7 @@ void SEGMENT_IDX_RECORD_normalize (struct SEGMENT_IDX_RECORD *f)
 {
   f->startTime            =le64toh(f->startTime);
   f->endTime              =le64toh(f->endTime);
-  f->firstKeyFrame_absTime=le64toh(f->firstKeyFrame_absTime);
+  f->firstKeyFrame_absTime1=le32toh(f->firstKeyFrame_absTime1);
   f->firstKeyFrame_stdTime=le32toh(f->firstKeyFrame_stdTime);
   f->lastFrame_stdTime    =le32toh(f->lastFrame_stdTime);
   f->startOffset          =le32toh(f->startOffset);
@@ -302,7 +306,7 @@ int main(int argc, char **argv)
 	  		    	printf("status: %u\n",segment.status);
 		    	  	printf("startTime: %s\n",timeformat(segment.startTime));
 		  	  	  printf("endTime: %s\n",timeformat(segment.endTime));
-		  	  	  printf("firstKeyFrame_absTime: %s\n",timeformat(segment.firstKeyFrame_absTime));
+		  	  	  printf("firstKeyFrame_absTime: %s\n",timeformat(segment.firstKeyFrame_absTime1));
 		  	  	  printf("firstKeyFrame_stdTime: %u\n",segment.firstKeyFrame_stdTime);
 		  	  	  printf("lastFrame_stdTime: %u\n",segment.lastFrame_stdTime);
 	    	  	  printf("startOffset: %u\n",segment.startOffset);
