@@ -25,3 +25,4 @@ Tools for Hikvision IP cameras
     Test:
     ./extract_video -i /media/ipcam/datadir0/ -o /path/to/output -l -s 2014-10-13 -v
 
+MK: it did not work on Manjaro Linux 64bit. Type of date fields was changed to int32_t. Now it works with my Hikvision cameras.
