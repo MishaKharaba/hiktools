@@ -327,7 +327,7 @@ int main(int argc, char **argv)
 
 							if (!totals_only)
 						  {	printf("File name: %s\n",ovFilename);
-								printf("File size: %u bytes\n",filesize);
+								printf("File size: %u bytes\n",(unsigned int)filesize);
 								printf("Play time: %u sec\n",segment.endTime-segment.startTime);
 							}
 							
